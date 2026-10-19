@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi HPC - Tugas Pertemuan 2</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px; display: flex; justify-content: center; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 550px; }
+        h2 { color: #d9381e; margin-top: 0; text-align: center; }
+        p.subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #333; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        button { background-color: #d9381e; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        button:hover { background-color: #b32a13; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 6px; background-color: #fdf2f0; color: #9c2714; font-weight: bold; display: none; }
+        .result ul { margin: 5px 0 0 20px; padding: 0; font-weight: normal; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Simulasi Performa HPC</h2>
+        <p class="subtitle">Materi: Bridging Global Infrastructure with HPC (Worawan Diaz Carballo)</p>
+        
+        <div class="form-group">
+            <label for="jumlahData">Jumlah Titik Data / Beban Kerja (Juta):</label>
+            <input type="number" id="jumlahData" value="50" min="1" max="500">
+        </div>
+
+        <div class="form-group">
+            <label for="jumlahCore">Jumlah Core CPU Paralel:</label>
+            <input type="number" id="jumlahCore" value="8" min="1" max="64">
+        </div>
+
+        <button onclick="jalankanSimulasi()">Jalankan Simulasi HPC</button>
+
+        <div id="hasil" class="result"></div>
+    </div>
+
+    <script>
+        function jalankanSimulasi() {
+            let data = parseFloat(document.getElementById('jumlahData').value);
+            let core = parseInt(document.getElementById('jumlahCore').value);
+            let hasilDiv = document.getElementById('hasil');
+
+            if (isNaN(data) || isNaN(core) || data <= 0 || core <= 0) {
+                hasilDiv.style.display = 'block';
+                hasilDiv.innerText = 'Mohon masukkan angka yang valid!';
+                return;
+            }
+
+            // Asumsi perhitungan waktu (detik)
+            let waktuSequential = data * 0.15; // Waktu 1 core
+            // Efisiensi paralel diasumsikan 85% per core tambahan (Hukum Amdahl sederhana)
+            let efisiensi = 0.85;
+            let waktuParalel = waktuSequential / (core * efisiensi);
+            if (waktuParalel < 0.05) waktuParalel = 0.05;
+
+            let speedup = waktuSequential / waktuParalel;
+
+            hasilDiv.style.display = 'block';
+            hasilDiv.innerHTML = `
+                Hasil Analisis Performa HPC:
+                <ul>
+                    <li>Waktu Proses Sekuensial (1 Core): <b>${waktuSequential.toFixed(2)} detik</b></li>
+                    <li>Waktu Proses Paralel (${core} Core): <b>${waktuParalel.toFixed(2)} detik</b></li>
+                    <li>Peningkatan Kecepatan (Speedup): <b>${speedup.toFixed(1)}x lebih cepat! 🚀</b></li>
+                </ul>
+            `;
+        }
+    </script>
+
+</body>
+</html>

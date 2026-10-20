@@ -1,3 +1,5 @@
+website: https://fitriawulandini-hash.github.io/Simulasi-Analisis-HPC-2/
+
 Simulasi & Analisis HPC (High-Performance Computing)
 
 Repositori ini dibuat untuk studi kasus materi Pertemuan 2 mengenai pemanfaatan infrastruktur komputasi global untuk tantangan lokal menggunakan *High-Performance Computing* (HPC).
